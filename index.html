@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profit Record</title>
+    <style>
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Container for Input Fields */
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Styling Input Fields */
+        .inputData {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        /* Save Button Styling */
+        #btn-save {
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        #btn-save:hover {
+            background-color: #218838;
+        }
+
+        /* Table Styling */
+        h2 {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        td {
+            color: #333;
+        }
+
+        /* Total Text Styling */
+        p {
+            font-size: 18px;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+                box-shadow: none;
+                margin: 10px auto;
+            }
+
+            .inputData {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            #btn-save {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            /* Total styling for mobile */
+            p {
+                text-align: left;
+                font-size: 25px;
+            }
+        }
+
+        h1 {
+            justify-content: center;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #333;
+            color: white;
+            align-items: center;
+            display: flex;
+            padding: 10px;
+            margin-top: 0px;
+        }
+
+        /* Status Cell Styling */
+        .pending {
+            background-color: #ffcccc; /* Light red for pending */
+            color: red;
+        }
+
+        .payment-ok {
+            background-color: #ccffcc; /* Light green for payment ok */
+            color: green;
+        }
+
+        /* Button for Paid and Unpaid Reports */
+        .report-btn {
+            margin: 10px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .report-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Search Bar */
+        .search-container {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .search-bar {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .search-bar:focus {
+            width: 300px;
+            outline: none;
+        }
+
+        /* Error message */
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Customer Record & Profit Calculator</h1>
+
+    <!-- Main Container -->
+    <div class="container">
+        <input type="date" name="data" id="date" class="inputData">
+        <input type="text" placeholder="Customer Name" id="CustomerName" class="inputData">
+        <input type="text" placeholder="Address" id="Address" class="inputData">
+        <input type="text" placeholder="Tracking ID / Order Number" id="OrderNumber" class="inputData">
+        <input type="text" placeholder="Profit" id="Profit" class="inputData">
+        <button id="btn-save" onclick="SaveData()">Save</button>
+        <div id="error-message" class="error"></div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search...">
+    </div>
+
+    <!-- Report Buttons -->
+    <button class="report-btn" onclick="showPaidReport()">Paid Report</button>
+    <button class="report-btn" onclick="showUnpaidReport()">Unpaid Report</button>
+
+    <!-- Record Table -->
+    <h2>Record</h2>
+    <table border="1" id="TableData">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Tracking ID</th>
+                <th>Profit</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <p>Total Profit: <span id="TotalProfit">0</span></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
